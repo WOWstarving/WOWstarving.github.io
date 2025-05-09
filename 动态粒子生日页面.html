@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生日祝福</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#4EB3D3',secondary:'#2CCCC3'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Ma Shan Zheng', cursive;
+overflow: hidden;
+}
+#particles-js {
+position: absolute;
+width: 100%;
+height: 100%;
+background: linear-gradient(135deg, #4EB3D3 0%, #2CCCC3 100%);
+z-index: -1;
+}
+.glass {
+background: rgba(255, 255, 255, 0.25);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.18);
+box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+}
+.shake {
+animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+@keyframes shake {
+10%, 90% { transform: translate3d(-1px, 0, 0); }
+20%, 80% { transform: translate3d(2px, 0, 0); }
+30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+.error-message {
+position: absolute;
+top: -50px;
+left: 50%;
+transform: translateX(-50%);
+background-color: #ff6b6b;
+color: white;
+padding: 10px 20px;
+border-radius: 8px;
+font-weight: bold;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+opacity: 0;
+transition: all 0.3s ease;
+}
+.error-message.show {
+top: 20px;
+opacity: 1;
+}
+.birthday-page {
+display: none;
+background: linear-gradient(135deg, #FFD9E8 0%, #FFF0F5 100%);
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 100;
+overflow: hidden;
+}
+.cake {
+position: relative;
+width: 300px;
+margin: 0 auto;
+}
+.candle {
+position: absolute;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.candle:hover {
+transform: scale(1.5);
+}
+.flame {
+display: none;
+position: absolute;
+width: 15px;
+height: 30px;
+background: radial-gradient(ellipse at bottom, #FFD45E 0%, #FF7A00 80%);
+border-radius: 50% 50% 20% 20%;
+box-shadow: 0 0 10px #FF6D00, 0 0 20px #FF6D00, 0 0 30px #FF6D00;
+animation: flicker 0.6s ease-in-out infinite alternate;
+}
+@keyframes flicker {
+0% { transform: scaleY(1); opacity: 0.8; }
+100% { transform: scaleY(1.1); opacity: 1; }
+}
+.danmaku {
+position: absolute;
+white-space: nowrap;
+font-weight: bold;
+font-size: 24px;
+animation: moveLeft 15s linear forwards;
+z-index: 10;
+}
+@keyframes moveLeft {
+from { transform: translateX(100vw); }
+to { transform: translateX(-300%); }
+}
+.cake-container {
+position: relative;
+width: 300px;
+height: 300px;
+margin: 0 auto;
+}
+.plate {
+position: absolute;
+bottom: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 270px;
+height: 20px;
+background: #f0f0f0;
+border-radius: 50%;
+box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.cake-layer {
+position: absolute;
+left: 50%;
+transform: translateX(-50%);
+background: #FFB6C1;
+border-radius: 8px;
+}
+.cake-layer-bottom {
+bottom: 20px;
+width: 250px;
+height: 60px;
+background: #FFB6C1;
+}
+.cake-layer-middle {
+bottom: 80px;
+width: 200px;
+height: 50px;
+background: #FFC0CB;
+}
+.cake-layer-top {
+bottom: 130px;
+width: 150px;
+height: 40px;
+background: #FFD7E0;
+}
+.frosting {
+position: absolute;
+bottom: 170px;
+left: 50%;
+transform: translateX(-50%);
+width: 160px;
+height: 15px;
+background: white;
+border-radius: 15px;
+}
+.drip {
+position: absolute;
+width: 20px;
+height: 30px;
+background: white;
+border-radius: 0 0 10px 10px;
+}
+.drip-1 {
+left: 30%;
+bottom: 165px;
+}
+.drip-2 {
+left: 50%;
+bottom: 165px;
+}
+.drip-3 {
+left: 70%;
+bottom: 165px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center" style="background: linear-gradient(135deg, #4EB3D3 0%, #2CCCC3 100%);">
+<!-- 粒子背景 -->
+<div id="particles-js"></div>
+<!-- 登录对话框 -->
+<div id="login-box" class="glass w-96 p-8 rounded-2xl z-10 text-center">
+<h2 class="text-3xl mb-6 text-white font-['Ma_Shan_Zheng']">神秘花园</h2>
+<p class="text-white mb-6 opacity-80">请输入密码进入</p>
+<div class="relative mb-6">
+<input
+type="password"
+id="password"
+class="w-full px-4 py-3 rounded-button bg-white bg-opacity-20 border-none text-white placeholder-white placeholder-opacity-60 focus:outline-none focus:ring-2 focus:ring-primary"
+placeholder="请输入密码"
+autocomplete="off"
+>
+<div class="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 flex items-center justify-center">
+<i class="ri-lock-line text-white"></i>
+</div>
+</div>
+<button id="submit-btn" class="w-full py-3 bg-primary hover:bg-opacity-90 text-white font-bold rounded-button transition duration-300 !rounded-button whitespace-nowrap">
+进入
+</button>
+<div id="error-message" class="error-message">这都猜不对！？</div>
+</div>
+<!-- 生日祝福页面 -->
+<div id="birthday-page" class="birthday-page flex flex-col items-center justify-center" style="display: none;">
+<div id="modal-overlay" class="modal-overlay"></div>
+<div id="wish-modal" class="wish-modal">
+<h3 class="text-2xl font-bold text-gray-800 mb-4">真的，许了愿望就能成真，真的！别不信</h3>
+<textarea id="wish-input" class="w-full p-3 border border-gray-200 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="写下你的愿望..." maxlength="50"></textarea>
+<div class="flex justify-end gap-3">
+<button id="blow-candles" class="px-4 py-2 bg-gray-500 text-white rounded-button hover:bg-gray-600 transition duration-300 !rounded-button whitespace-nowrap">吹灭蜡烛</button>
+<button id="make-wish" class="px-4 py-2 bg-primary text-white rounded-button hover:bg-opacity-90 transition duration-300 !rounded-button whitespace-nowrap">许愿</button>
+</div>
+</div>
+<h1 class="text-4xl font-bold text-pink-600 mb-8">快许愿，蛋糕要凉了</h1>
+<div class="cake mb-8">
+<div class="cake-container">
+<div class="plate"></div>
+<div class="cake-layer cake-layer-bottom"></div>
+<div class="cake-layer cake-layer-middle"></div>
+<div class="cake-layer cake-layer-top"></div>
+<div class="frosting"></div>
+<div class="drip drip-1"></div>
+<div class="drip drip-2"></div>
+<div class="drip drip-3"></div>
+</div>
+<!-- 蜡烛 -->
+<div class="candle" style="top: 85px; left: 30%;" data-flame-pos="top: -25px; left: 0px;">
+<img src="https://readdy.ai/api/search-image?query=A%20single%20unlit%20birthday%20candle%2C%20white%20or%20pink%20color%2C%20simple%20design%2C%20small%20size%2C%20transparent%20background%2C%20studio%20lighting&width=20&height=40&seq=candle1&orientation=portrait" alt="蜡烛" class="w-5">
+<div class="flame"></div>
+</div>
+<div class="candle" style="top: 85px; left: 50%;" data-flame-pos="top: -25px; left: 0px;">
+<img src="https://readdy.ai/api/search-image?query=A%20single%20unlit%20birthday%20candle%2C%20white%20or%20pink%20color%2C%20simple%20design%2C%20small%20size%2C%20transparent%20background%2C%20studio%20lighting&width=20&height=40&seq=candle2&orientation=portrait" alt="蜡烛" class="w-5">
+<div class="flame"></div>
+</div>
+<div class="candle" style="top: 85px; left: 70%;" data-flame-pos="top: -25px; left: 0px;">
+<img src="https://readdy.ai/api/search-image?query=A%20single%20unlit%20birthday%20candle%2C%20white%20or%20pink%20color%2C%20simple%20design%2C%20small%20size%2C%20transparent%20background%2C%20studio%20lighting&width=20&height=40&seq=candle3&orientation=portrait" alt="蜡烛" class="w-5">
+<div class="flame"></div>
+</div>
+</div>
+<p class="text-lg text-gray-700">点击蜡烛，许个生日愿望吧！</p>
+</div>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// 初始化粒子效果
+particlesJS('particles-js', {
+"particles": {
+"number": {
+"value": 80,
+"density": {
+"enable": true,
+"value_area": 800
+}
+},
+"color": {
+"value": "#ffffff"
+},
+"shape": {
+"type": "circle",
+"stroke": {
+"width": 0,
+"color": "#000000"
+},
+"polygon": {
+"nb_sides": 5
+}
+},
+"opacity": {
+"value": 0.5,
+"random": false,
+"anim": {
+"enable": false,
+"speed": 1,
+"opacity_min": 0.1,
+"sync": false
+}
+},
+"size": {
+"value": 3,
+"random": true,
+"anim": {
+"enable": false,
+"speed": 40,
+"size_min": 0.1,
+"sync": false
+}
+},
+"line_linked": {
+"enable": true,
+"distance": 150,
+"color": "#ffffff",
+"opacity": 0.4,
+"width": 1
+},
+"move": {
+"enable": true,
+"speed": 2,
+"direction": "none",
+"random": false,
+"straight": false,
+"out_mode": "out",
+"bounce": false,
+"attract": {
+"enable": false,
+"rotateX": 600,
+"rotateY": 1200
+}
+}
+},
+"interactivity": {
+"detect_on": "canvas",
+"events": {
+"onhover": {
+"enable": true,
+"mode": "grab"
+},
+"onclick": {
+"enable": true,
+"mode": "push"
+},
+"resize": true
+},
+"modes": {
+"grab": {
+"distance": 140,
+"line_linked": {
+"opacity": 1
+}
+},
+"bubble": {
+"distance": 400,
+"size": 40,
+"duration": 2,
+"opacity": 8,
+"speed": 3
+},
+"repulse": {
+"distance": 200,
+"duration": 0.4
+},
+"push": {
+"particles_nb": 4
+},
+"remove": {
+"particles_nb": 2
+}
+}
+},
+"retina_detect": true
+});
+// 登录验证
+const loginBox = document.getElementById('login-box');
+const passwordInput = document.getElementById('password');
+const submitBtn = document.getElementById('submit-btn');
+const errorMessage = document.getElementById('error-message');
+const birthdayPage = document.getElementById('birthday-page');
+const correctPassword = "20050521";
+function checkPassword() {
+if (passwordInput.value === correctPassword) {
+// 正确密码，显示生日页面
+loginBox.style.display = 'none';
+birthdayPage.style.display = 'flex';
+} else {
+// 错误密码，抖动效果
+loginBox.classList.add('shake');
+errorMessage.classList.add('show');
+setTimeout(() => {
+loginBox.classList.remove('shake');
+errorMessage.classList.remove('show');
+}, 2000);
+}
+}
+submitBtn.addEventListener('click', checkPassword);
+passwordInput.addEventListener('keypress', function(e) {
+if (e.key === 'Enter') {
+checkPassword();
+}
+});
+});
+document.addEventListener('DOMContentLoaded', function() {
+const modalOverlay = document.getElementById('modal-overlay');
+const wishModal = document.getElementById('wish-modal');
+const wishInput = document.getElementById('wish-input');
+const makeWishBtn = document.getElementById('make-wish');
+const blowCandlesBtn = document.getElementById('blow-candles');
+// 蜡烛点击事件
+const candles = document.querySelectorAll('.candle');
+let candlesLit = 0;
+function showWishModal() {
+modalOverlay.style.display = 'block';
+wishModal.style.display = 'block';
+}
+function hideWishModal() {
+modalOverlay.style.display = 'none';
+wishModal.style.display = 'none';
+wishInput.value = '';
+}
+function createSpecialDanmaku(wish) {
+const danmaku = document.createElement('div');
+danmaku.className = 'special-danmaku';
+danmaku.textContent = wish;
+document.getElementById('birthday-page').appendChild(danmaku);
+danmaku.addEventListener('animationend', () => danmaku.remove());
+}
+function createConfetti() {
+const celebration = document.createElement('div');
+celebration.className = 'celebration';
+document.body.appendChild(celebration);
+const colors = ['#FF6B6B', '#4EB3D3', '#FFD166', '#06D6A0', '#118AB2'];
+for (let i = 0; i < 100; i++) {
+const confetti = document.createElement('div');
+confetti.className = 'confetti';
+confetti.style.left = Math.random() * 100 + 'vw';
+confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+confetti.style.animationDelay = Math.random() * 2 + 's';
+celebration.appendChild(confetti);
+}
+setTimeout(() => celebration.remove(), 4000);
+}
+function blowOutCandles() {
+const flames = document.querySelectorAll('.flame');
+flames.forEach(flame => {
+flame.style.display = 'none';
+});
+candlesLit = 0;
+hideWishModal();
+createConfetti();
+}
+document.querySelectorAll('.flame').forEach(flame => {
+flame.addEventListener('click', showWishModal);
+});
+makeWishBtn.addEventListener('click', () => {
+if (wishInput.value.trim()) {
+createSpecialDanmaku(wishInput.value);
+hideWishModal();
+}
+});
+blowCandlesBtn.addEventListener('click', blowOutCandles);
+modalOverlay.addEventListener('click', hideWishModal);
+candles.forEach(candle => {
+candle.addEventListener('click', function() {
+const flame = this.querySelector('.flame');
+if (flame.style.display !== 'block') {
+flame.style.display = 'block';
+// 设置火焰位置
+const flamePos = this.getAttribute('data-flame-pos').split(';');
+flamePos.forEach(pos => {
+const [property, value] = pos.trim().split(':');
+flame.style[property] = value;
+});
+candlesLit++;
+// 当所有蜡烛点亮时，显示弹幕
+if (candlesLit === candles.length) {
+setTimeout(showDanmaku, 500);
+}
+}
+});
+});
+// 弹幕效果
+function showDanmaku() {
+const colors = ['#FF6B6B', '#4EB3D3', '#FFD166', '#06D6A0', '#118AB2', '#FF9E80', '#FF4081'];
+const messages = ['方老师就是甜妹儿~', '方佳最美','不是！怎么会这么好看！' ,'祝方佳生日快乐', '聪明勇敢有力气', '方佳天天开心', '完了，方佳又变美了', '生日快乐鸭','方老师为什么这么好看'];
+function createDanmaku() {
+const danmaku = document.createElement('div');
+danmaku.className = 'danmaku';
+danmaku.textContent = messages[Math.floor(Math.random() * messages.length)];
+danmaku.style.color = colors[Math.floor(Math.random() * colors.length)];
+danmaku.style.top = `${Math.random() * 80 + 10}%`;
+danmaku.style.animationDuration = `${Math.random() * 5 + 5}s`;
+document.getElementById('birthday-page').appendChild(danmaku);
+// 动画结束后移除元素
+danmaku.addEventListener('animationend', function() {
+this.remove();
+});
+}
+// 初始弹幕
+for (let i = 0; i < 10; i++) {
+setTimeout(() => {
+createDanmaku();
+}, i * 300);
+}
+// 持续创建弹幕
+setInterval(createDanmaku, 500);
+}
+});
+</script>
+</body>
+</html>
